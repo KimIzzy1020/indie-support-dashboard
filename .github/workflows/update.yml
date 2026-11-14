@@ -1,0 +1,52 @@
+name: RSS 후보 수집 및 Pages 배포
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 0 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: indie-support-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - name: Collect RSS
+        if: github.event_name != 'push'
+        run: python3 scripts/update.py
+      - name: Persist RSS history
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/notices.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update RSS discovery candidates"
+            git push origin HEAD:main
+          fi
+      - name: Stage website
+        run: |
+          mkdir -p _site/data
+          cp index.html .nojekyll _site/
+          cp data/notices.json _site/data/
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
+        id: deployment
