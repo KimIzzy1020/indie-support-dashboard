@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>독립출판 창업 지원사업</title>
+<style>
+:root{color-scheme:light;--ink:#22211f;--muted:#66635e;--line:#dedbd6;--paper:#faf9f7;--coral:#aa422e}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#fff;font:15px/1.6 "Instrument Sans","Malgun Gothic",system-ui,sans-serif}button,input,select,textarea{font:inherit;color:inherit}button,select,summary{cursor:pointer}button,input,select,textarea{border:1px solid var(--line);background:white;padding:.55rem .75rem;border-radius:4px}button:hover{background:var(--paper)}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--coral);outline-offset:3px}a{color:inherit;text-underline-offset:4px}button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}[hidden]{display:none!important}
+header{border-bottom:1px solid var(--line)}.bar,main,footer{width:min(1140px,calc(100% - 64px));margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0}.brand{font-weight:800;white-space:nowrap}.brand::before{content:"";display:inline-block;width:8px;height:8px;background:var(--coral);margin-right:10px}nav,.actions,.filters{display:flex;flex-wrap:wrap;align-items:center;gap:8px}nav button{border:0;color:var(--muted);white-space:nowrap}nav button[aria-current=page]{color:var(--ink);box-shadow:inset 0 -2px var(--ink)}
+main{min-height:68vh;padding:52px 0 44px}h1,h2,h3,p{margin:0}h1{font-size:clamp(30px,5vw,54px);letter-spacing:-.075em;line-height:1.17}h2{font-size:24px;letter-spacing:-.045em}h3{font-size:17px}.muted,small{color:var(--muted)}.hot{color:var(--coral);font-weight:750}.intro{margin-top:12px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);margin:29px 0 48px;border-block:1px solid var(--line)}.metrics button{border:0;border-radius:0;text-align:left;padding:16px 20px}.metrics button+button{border-left:1px solid var(--line)}.metrics strong{display:block;font-size:33px;letter-spacing:-.07em;line-height:1.15;font-variant-numeric:tabular-nums}.metrics span{font-size:13px;color:var(--muted)}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.filters{margin-bottom:16px}.filters input[type=search]{flex:1;min-width:190px}.filter-panel{padding:12px 0}.filter-panel label,.formgrid label{display:grid;gap:4px}.row{display:grid;grid-template-columns:minmax(0,2.5fr) minmax(115px,1fr) minmax(110px,1fr) minmax(70px,.55fr) 44px;gap:15px;align-items:center;padding:15px 10px;border-bottom:1px solid var(--line)}.row.head{background:var(--paper);border-top:1px solid var(--line);padding-block:9px;color:var(--muted);font-size:13px}.title{background:none;border:0;padding:0;text-align:left;font-size:17px;font-weight:780;letter-spacing:-.035em;overflow-wrap:anywhere}.row small{display:block}.star{padding:.2rem;border:0;font-size:22px}.mobile-label{display:none}.empty{padding:28px 8px;border-block:1px solid var(--line);color:var(--muted)}
+footer{padding:18px 0 30px;border-top:1px solid var(--line);color:var(--muted)}footer details{margin-top:10px}footer a{display:inline-block;margin:8px 14px 0 0}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}.wide{grid-column:1/-1}textarea{width:100%;min-height:100px;resize:vertical}.section{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}dialog{border:0;border-left:1px solid var(--line);padding:28px;width:min(620px,100%);max-width:100%;height:100%;max-height:100%;margin:0 0 0 auto;color:var(--ink);overflow:auto}dialog::backdrop{background:#24211f65}dialog h2{margin:10px 0 5px}dialog dl{display:grid;grid-template-columns:90px 1fr;gap:6px;margin:16px 0}dialog dd{margin:0;overflow-wrap:anywhere}dialog .check{display:block;margin:7px 0}dialog .actions{margin-top:12px}#feedback{min-height:1.6em;margin-top:8px}.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin:16px 0;gap:2px}.calendar>span,.calendar>button{padding:8px 2px;text-align:center;min-width:0}.calendar>span{color:var(--muted)}.calendar .has{font-weight:700}.calendar [aria-pressed=true]{background:var(--ink);color:white}.event{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:430px}th,td{text-align:left;vertical-align:top;padding:12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}thead{background:var(--paper)}
+@media(max-width:760px){.bar,main,footer{width:calc(100% - 32px)}.bar{align-items:flex-start;flex-direction:column;gap:5px}nav{gap:2px}nav button{padding:5px 8px}main{padding-top:29px}.metrics{margin-bottom:30px}.metrics button{padding:12px 8px}.metrics span{font-size:12px}.row.head{display:none}.row{grid-template-columns:repeat(3,minmax(0,1fr)) 32px;gap:8px}.row .name{grid-column:1/4}.row .star{grid-row:1;grid-column:4}.mobile-label{display:block;font-size:11px;color:var(--muted)}.heading{flex-wrap:wrap}.formgrid{grid-template-columns:1fr}dialog{padding:17px}}
+</style></head><body>
+<header><div class="bar"><span class="brand">독립출판 창업</span><nav aria-label="대시보드 메뉴">
+<button data-view="list" aria-current="page">지원사업</button><button data-view="calendar">캘린더</button><button data-view="compare">비교 <span id="compare-count"></span></button><button data-view="archive">지난 공고</button><button data-view="settings">나의 조건</button>
+</nav></div></header>
+<main>
+<section id="list"><h1>독립출판 창업 지원사업</h1><p class="intro muted">2027년 출판사 창업을 위한 공고와 신청 준비</p>
+<div class="metrics"><button data-quick="saved"><strong id="saved-count">0</strong><span>관심 사업</span></button><button data-quick="urgent"><strong class="hot" id="urgent-count">0</strong><span>7일 내 마감</span></button><button data-quick="preparing"><strong id="prep-count">0</strong><span>신청 준비 중</span></button></div>
+<div class="heading"><h2>우선 확인할 지원사업</h2><button class="primary" data-add>＋ 공고 추가</button></div>
+<div class="filters"><input id="search" type="search" placeholder="사업명, 기관, 키워드 검색" aria-label="지원사업 검색"><select id="quick" aria-label="빠른 필터"><option value="">전체</option><option value="saved">관심 사업</option><option value="urgent">7일 내 마감</option><option value="preparing">신청 준비 중</option><option value="applied">신청 완료</option><option value="new">새 발견 후보</option></select><select id="sort" aria-label="정렬"><option value="priority">우선순위</option><option value="deadline">마감일순</option><option value="fit">적합도순</option><option value="name">이름순</option></select></div>
+<details><summary>상세 필터</summary><div class="filters filter-panel"><select id="category" aria-label="분야"></select><select id="type" aria-label="지원 유형"></select><select id="elig" aria-label="신청 자격"><option value="">전체 자격</option><option>조건 일치</option><option>확인 필요</option><option>조건 불일치</option></select><label><input type="checkbox" id="dated"> 마감일 확인된 공고만</label></div></details>
+<p id="result-count" class="muted"></p><div class="row head" aria-hidden="true"><span>지원사업</span><span>신청 마감</span><span>신청 자격</span><span>적합도</span><span>관심</span></div><div id="results"></div></section>
+<section id="calendar" hidden><div class="heading"><h1>지원사업 캘린더</h1><label><input type="checkbox" id="calendar-saved"> 관심 사업만</label></div><div class="heading"><button id="previous">이전 달</button><h2 id="month"></h2><button id="next">다음 달</button></div><div id="calendar-days" class="calendar"></div><h3 id="date-label"></h3><div id="events"></div></section>
+<section id="compare" hidden><div class="heading"><h1>지원사업 비교</h1><span class="muted">최대 4개</span></div><div class="table-wrap" id="compare-table"></div></section>
+<section id="archive" hidden><div class="heading"><h1>지난 공고</h1></div><div class="filters"><input type="search" id="archive-search" placeholder="사업명, 기관, 연도 검색" aria-label="지난 공고 검색"></div><div id="archive-results"></div></section>
+<section id="settings" hidden><h1>나의 조건</h1><form id="profile" class="formgrid"></form><p class="muted">공고에 등록된 조건과 비교합니다. 확인할 정보가 부족하면 자격을 ‘확인 필요’로 표시합니다.</p><div class="section"><h2>백업 및 복원</h2><p class="muted">관심 사업, 신청 상태, 체크리스트, 메모는 이 브라우저에 저장됩니다. 다른 주소나 브라우저로 옮길 때는 JSON 백업을 사용하세요.</p><div class="actions"><button id="export">JSON 백업</button><button id="restore">JSON 복원</button><input id="backup" type="file" accept=".json,application/json" hidden></div></div></section>
+<p id="feedback" role="status"></p>
+</main>
+<footer><div class="actions"><span id="feed-status" role="status"></span><button id="refresh">신규 후보 확인</button></div><details><summary>공식 공고 확인처</summary><a href="https://www.k-startup.go.kr" target="_blank" rel="noopener">K-Startup</a><a href="https://www.bizinfo.go.kr" target="_blank" rel="noopener">기업마당</a><a href="https://www.kpipa.or.kr" target="_blank" rel="noopener">한국출판문화산업진흥원</a><a href="https://www.gcon.or.kr" target="_blank" rel="noopener">경기콘텐츠진흥원</a><a href="https://www.wbiz.or.kr" target="_blank" rel="noopener">여성기업종합지원센터</a></details></footer>
+<dialog id="drawer" aria-labelledby="drawer-title"></dialog>
+<script>
+const seed=[
+{id:'pre',title:'예비창업패키지',agency:'중소벤처기업부 · 창업진흥원',category:'창업',year:'2026 참고 공고',deadline:'2026-03-24',url:'https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000119019&target=M',description:'사업자등록 전 예비창업자 대상 사업화 자금 및 창업 프로그램. 기술·사업모델 평가와 출판업 적합성을 반드시 확인.',priority:1},
+{id:'gcon',title:'경기콘텐츠진흥원 창작·창업 지원사업',agency:'경기콘텐츠진흥원',category:'콘텐츠',year:'연도별 개별 공고 확인',deadline:'',url:'https://www.gcon.or.kr',description:'콘텐츠 제작, 창업, 로컬 콘텐츠, 공간·교육 등 사업별 모집. 독립출판 기획·콘텐츠 IP와 연결 가능한 공고를 선별.',priority:2},
+{id:'kpipa',title:'출판산업 지원사업·공모',agency:'한국출판문화산업진흥원',category:'출판',year:'연도별 개별 공고 확인',deadline:'',url:'https://www.kpipa.or.kr',description:'출판 제작·유통·해외 진출 등 공모 확인. 출판사 등록, 출간 실적 등 자격이 사업마다 다름.',priority:3},
+{id:'women',title:'여성 창업·보육 지원사업',agency:'여성기업종합지원센터',category:'여성',year:'연도별 개별 공고 확인',deadline:'',url:'https://www.wbiz.or.kr',description:'여성 예비창업자 및 여성기업 대상 교육·보육·공간 등. 사업별 여성기업 확인 요건 검토.',priority:4},
+{id:'local',title:'경기도 창업·여성 지원사업',agency:'경기도일자리재단',category:'지역',year:'연도별 개별 공고 확인',deadline:'',url:'https://www.gjf.or.kr',description:'경기도 거주·사업장 소재 기준과 연령 요건을 확인. 지역 창업 교육 및 사업화 공고 탐색.',priority:5},
+{id:'school',title:'청년창업사관학교 기본과정',agency:'중소벤처기업진흥공단',category:'창업',year:'2026 참고 공고',deadline:'2026-02-13',url:'https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000118036',description:'2026년 기준 39세 이하, 창업 후 3년 이내 등 요건. 사업화·교육·공간 지원. 독립출판 사업모델 적합성 확인 필요.',priority:6},
+{id:'level',title:'경기 레벨업 프로그램',agency:'경기콘텐츠진흥원',category:'콘텐츠',year:'2026 참고 공고',deadline:'2026-08-10',url:'https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?cpage=17&pblancId=PBLN_000000000124472&rows=15&schEndAt=N',description:'경기도 콘텐츠 스타트업 대상 성장·투자 연계. 예비창업보다는 사업 시작 후 검토할 후보.',priority:7},
+{id:'export',title:'출판 해외 진출·교류 프로그램',agency:'한국출판문화산업진흥원',category:'출판',year:'2026 한-불 출판 펠로우십 참고',deadline:'2026-07-20',url:'https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000124136',description:'기존 출판사 해외 진출 단계에서 검토. 2026년 한-불 출판 펠로우십 사례이며 현재 모집 중 아님.',priority:8}
+];
+
+const $ = id => document.getElementById(id);
+const key = 'indie-pub-grants-v2';
+const defaults = {stage:'pre',focus:'publishing',region:'gyeonggi',youth:'unknown',woman:'unknown',years:'',industry:'',support:''};
+const dictionary = value => Object.assign(Object.create(null), value && typeof value === 'object' && !Array.isArray(value) ? value : {});
+const record = x => x && typeof x.id === 'string' && typeof x.title === 'string' && x.title.trim();
+function normalize(data = {}) {
+  const states = dictionary(data.states);
+  return {
+    items: Array.isArray(data.items) ? data.items.filter(record).map(x=>({...x,custom:true})) : [],
+    states, notes:dictionary(data.notes), checks:dictionary(data.checks),
+    profile:{...defaults,...data.profile},
+    favorites:[...new Set([...(Array.isArray(data.favorites)?data.favorites:[]),...Object.keys(states).filter(id=>states[id]==='saved')])],
+    compare:Array.isArray(data.compare)?[...new Set(data.compare)].slice(0,4):[],
+    archived:Array.isArray(data.archived)?data.archived:[],
+    seen:Array.isArray(data.seen)?data.seen:[],
+    liveCache:Array.isArray(data.liveCache)?data.liveCache.filter(record):[],
+    lastChecked:data.lastChecked||null
+  };
+}
+let db = normalize();
+try { db = normalize(JSON.parse(localStorage.getItem(key) || localStorage.getItem('indie-pub-grants-v1') || '{}') || {}); } catch {}
+const feedback = message => { $('feedback').textContent=message; };
+function save() {
+  try { localStorage.setItem(key,JSON.stringify(db)); return true; }
+  catch { feedback('브라우저에 저장할 수 없습니다. JSON으로 백업해 주세요.'); return false; }
+}
+const esc = value => String(value??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function link(x) {
+  const label = candidate(x)?'발견 기사 열기':x.year==='연도별 개별 공고 확인'?'공식 기관 열기':'공고 링크 열기';
+  try {
+    const url=new URL(x.url);
+    if (['https:','http:'].includes(url.protocol)) return '<a href="'+esc(url.href)+'" target="_blank" rel="noopener noreferrer">'+label+' ↗</a>';
+  } catch {}
+  return '링크 미확인';
+}
+const today = () => new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const validDate = d => typeof d==='string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d)) && new Date(d).toISOString().slice(0,10)===d;
+const left = x => validDate(x.deadline)?(Date.parse(x.deadline)-Date.parse(today()))/86400000:Infinity;
+const past = x => left(x)<0 || db.archived.includes(x.id);
+const urgent = x => !past(x) && left(x)<=7;
+const countdown = x => left(x)===Infinity?'마감 미확인':left(x)<0?'마감 종료':left(x)===0?'D-DAY':'D-'+left(x);
+const candidate = x => x.id.startsWith('news-') || x.category==='발견 후보';
+const all = () => [...new Map([...db.liveCache,...seed,...db.items].map(x=>[x.id,x])).values()];
+const get = id => all().find(x=>x.id===id);
+const favorite = x => db.favorites.includes(x.id);
+const progress = x => ['preparing','applied'].includes(db.states[x.id])?db.states[x.id]:'';
+const progressLabel = x => ({preparing:'준비 중',applied:'신청 완료'})[progress(x)]||'미지정';
+const type = x => x.supportType||'확인 필요';
+const facts = x => [x.title,x.agency,x.description,x.category,x.year,x.eligibilityText,x.supportType].join(' ');
+const fresh = new Set();
+function eligibility(x) {
+  if(candidate(x)) return {label:'확인 필요',details:['뉴스 RSS 발견 후보 · 공식 공고 원문 확인']};
+  const p=db.profile;
+  const stage=x.eligibilityStage || ({pre:'pre',school:'new',level:'new',export:'new'})[x.id];
+  const checks=[];
+  function check(name, condition, observed) {
+    if (!condition) return;
+    checks.push([name,observed]);
+  }
+  check('창업 단계',stage&&stage!=='unknown',stage==='both'||stage===p.stage?true:p.stage==='unknown'?null:false);
+  check('청년',x.youthOnly,p.youth==='unknown'?null:p.youth==='yes');
+  check('여성',x.womenOnly,p.woman==='unknown'?null:p.woman==='yes');
+  check('지역',x.regionRequired,x.regionRequired==='national'?true:p.region==='unknown'?null:x.regionRequired===p.region);
+  const maxYears=x.maxYears!==''&&x.maxYears!=null&&Number.isFinite(Number(x.maxYears));
+  check('창업 연차',maxYears,p.stage!=='new'||p.years===''?null:Number(p.years)<=Number(x.maxYears));
+  check('업종',x.industryRequired,p.industry?String(x.industryRequired).trim().toLowerCase()===String(p.industry).trim().toLowerCase():null);
+  const confirmed=Boolean(x.conditionsComplete && checks.length && checks.every(([,result])=>result===true));
+  return {
+    label:checks.some(([,result])=>result===false)?'조건 불일치':confirmed?'조건 일치':'확인 필요',
+    details:checks.map(([name,result])=>name+' · '+(result===true?'일치':result===false?'불일치':'내 조건 확인 필요')).concat(confirmed?[]:['공고 원문에서 전체 자격 확인'])
+  };
+}
+function fit(x) {
+  const t=facts(x), p=db.profile;
+  const points=[
+    ['출판·편집 관련', /출판|도서|편집|북디자인|책/.test(t)?(p.focus==='publishing'?35:25):0,35],
+    ['디자인·콘텐츠 관련', /디자인|브랜드|콘텐츠|창작/.test(t)?(p.focus==='design'?25:20):0,25],
+    ['창업 단계 일치', (p.stage!=='unknown'&&x.eligibilityStage===p.stage)||x.eligibilityStage==='both'||(x.id==='pre'&&p.stage==='pre')?20:0,20],
+    ['지역 일치', (x.regionRequired==='national'||(p.region!=='unknown'&&x.regionRequired===p.region))?10:0,10],
+    ['선호 지원 유형', p.support&&type(x).includes(p.support)?10:0,10]
+  ];
+  return {points,total:points.reduce((sum,[,n])=>sum+n,0)};
+}
+const checks=['최신 공식 공고문 확인','신청 자격·업종·지역 확인','지원금·자부담·제외 조건 확인','사업계획서 작성','증빙서류 준비','신청서 제출','접수 확인'];
+const getChecks = id => Array.isArray(db.checks[id])?db.checks[id]:[];
+const button = (id,label) => '<button class="title" data-open="'+esc(id)+'">'+esc(label)+'</button>';
+const empty = message => '<p class="empty">'+esc(message)+'</p>';
+let view='list';
+let selected=today();
+let month=selected.slice(0,7);
+let detailId=null;
+
+
+function rows(items) {
+  return items.map(x=>{
+    const deadline=validDate(x.deadline)?x.deadline:'';
+    const label=eligibility(x).label;
+    return `<article class="row"><div class="name">${button(x.id,x.title)}<small>${esc(x.agency)} · ${esc(x.category)}${progress(x)?' · '+progressLabel(x):''}${fresh.has(x.id)?' · <span class="hot">새 후보</span>':candidate(x)?' · 뉴스 RSS':x.year==='연도별 개별 공고 확인'?' · 기관 안내':''}</small></div>
+    <div><span class="mobile-label">신청 마감</span><span class="${urgent(x)?'hot':''}">${countdown(x)}</span><small>${deadline}</small></div>
+    <div><span class="mobile-label">신청 자격</span>${label}</div><div><span class="mobile-label">적합도</span><strong>${fit(x).total}</strong> / 100</div>
+    <button class="star ${favorite(x)?'hot':''}" data-star="${esc(x.id)}" aria-label="${esc(x.title)} 관심 사업" aria-pressed="${favorite(x)}">${favorite(x)?'★':'☆'}</button></article>`;
+  }).join('');
+}
+function renderList() {
+  const items=all(), active=items.filter(x=>!past(x));
+  $('saved-count').textContent=active.filter(favorite).length;
+  $('urgent-count').textContent=active.filter(urgent).length;
+  $('prep-count').textContent=active.filter(x=>progress(x)==='preparing').length;
+  for(const [id,label,values] of [
+    ['category','전체 분야',items.map(x=>x.category)],
+    ['type','전체 지원 유형',items.flatMap(x=>type(x).split(/[,·/]/).map(v=>v.trim()))]
+  ]) {
+    const previous=$(id).value;
+    $(id).replaceChildren(new Option(label,''),...[...new Set(values.filter(Boolean))].sort().map(v=>new Option(v,v)));
+    $(id).value=[...$(id).options].some(option=>option.value===previous)?previous:'';
+  }
+  const query=$('search').value.trim().toLowerCase(), category=$('category').value, support=$('type').value;
+  const qual=$('elig').value, dated=$('dated').checked, quick=$('quick').value, sort=$('sort').value;
+  const filters={saved:favorite,urgent,preparing:x=>progress(x)==='preparing',applied:x=>progress(x)==='applied',new:x=>fresh.has(x.id)};
+  const results=active.filter(x=>(!query||facts(x).toLowerCase().includes(query))&&(!category||x.category===category)&&(!support||type(x).includes(support))&&(!qual||eligibility(x).label===qual)&&(!dated||validDate(x.deadline))&&(!quick||filters[quick](x)));
+  const byDate=(a,b)=>(left(a)-left(b))||0;
+  const byFit=(a,b)=>fit(b).total-fit(a).total;
+  const rank=x=>eligibility(x).label==='조건 불일치'?2:urgent(x)?0:1;
+  results.sort((a,b)=>sort==='name'?a.title.localeCompare(b.title,'ko'):sort==='deadline'?byDate(a,b):sort==='fit'?byFit(a,b):rank(a)-rank(b)||byFit(a,b)||byDate(a,b));
+  $('result-count').textContent=results.length+'건';
+  $('results').innerHTML=rows(results)||empty('조건에 맞는 지원사업이 없습니다.');
+}
+function renderArchive() {
+  const query=$('archive-search').value.trim().toLowerCase();
+  $('archive-results').innerHTML=rows(all().filter(x=>past(x)&&facts(x).toLowerCase().includes(query)).sort((a,b)=>(b.deadline||'').localeCompare(a.deadline||'')))||empty('검색 조건에 맞는 지난 공고가 없습니다.');
+}
+function renderCalendar() {
+  const [year,m]=month.split('-').map(Number), prefix=month+'-';
+  $('month').textContent=year+'년 '+m+'월';
+  const entries=all().filter(x=>!$('calendar-saved').checked||favorite(x)).flatMap(x=>[[x.start,'접수 시작'],[x.deadline,'신청 마감']].filter(([date])=>validDate(date)&&date.startsWith(prefix)).map(([date,label])=>({date,label,x})));
+  const offset=new Date(Date.UTC(year,m-1,1)).getUTCDay(), days=new Date(Date.UTC(year,m,0)).getUTCDate();
+  $('calendar-days').innerHTML=[...'일월화수목금토'].map(d=>'<span>'+d+'</span>').join('')+'<span></span>'.repeat(offset)+Array.from({length:days},(_,i)=>{
+    const date=prefix+String(i+1).padStart(2,'0'), count=entries.filter(e=>e.date===date).length;
+    return `<button data-date="${date}" aria-label="${m}월 ${i+1}일, 일정 ${count}건" aria-pressed="${date===selected}" class="${count?'has':''}">${i+1}${count?' ·':''}</button>`;
+  }).join('');
+  $('date-label').textContent=selected+' 일정';
+  $('events').innerHTML=entries.filter(e=>e.date===selected).map(({label,x})=>`<div class="event"><small>${label}</small>${button(x.id,x.title)}</div>`).join('')||empty('이 날짜에 확인된 일정이 없습니다.');
+}
+function renderCompare() {
+  const items=db.compare.map(get).filter(Boolean);
+  $('compare-count').textContent=items.length?'('+items.length+')':'';
+  const fields=[
+    ['주관기관',x=>esc(x.agency)],['지원 유형',x=>esc(type(x))],['지원금',x=>esc(x.amount||'확인 필요')],
+    ['신청 자격',x=>esc(eligibility(x).label)+(x.eligibilityText?'<br>'+esc(x.eligibilityText):'')],
+    ['마감일',x=>esc(x.deadline||'확인 필요')],['적합도',x=>fit(x).total+' / 100'],['진행 상태',progressLabel],['공고 링크',link]
+  ];
+  $('compare-table').innerHTML=items.length?`<table><thead><tr><th scope="col">항목</th>${items.map(x=>`<th scope="col">${button(x.id,x.title)}<br><button data-compare="${esc(x.id)}">비교에서 빼기</button></th>`).join('')}</tr></thead><tbody>${fields.map(([label,render])=>`<tr><th scope="row">${label}</th>${items.map(x=>'<td>'+render(x)+'</td>').join('')}</tr>`).join('')}</tbody></table>`:empty('공고 상세에서 비교할 사업을 최대 4개 추가할 수 있어요.');
+}
+function render() { renderList(); renderArchive(); renderCalendar(); renderCompare(); }
+function go(name) {
+  $(view).hidden=true;
+  view=name;
+  $(view).hidden=false;
+  document.querySelectorAll('[data-view]').forEach(b=>b.dataset.view===name?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
+}
+const stageOptions={unknown:'확인 필요',pre:'예비창업',new:'사업자등록 후',both:'둘 다 가능'};
+const regionOptions={unknown:'확인 필요',gyeonggi:'경기도',seoul:'서울',other:'기타 지역',national:'전국'};
+const yesOptions={unknown:'미설정',yes:'해당',no:'해당 없음'};
+const supports=['지원금','교육','멘토링','공간','융자','기타'];
+function options(values,current) {
+  return Object.entries(values).map(([value,label])=>`<option value="${esc(value)}" ${String(current)===value?'selected':''}>${esc(label)}</option>`).join('');
+}
+function select(name,values,current) {return `<select name="${name}">${options(values,current)}</select>`;}
+const textInput=(name,value='',extra='')=>`<input name="${name}" value="${esc(value)}" ${extra}>`;
+function profileForm() {
+  const p=db.profile;
+  const stages={...stageOptions}; delete stages.both;
+  const regions={...regionOptions}; delete regions.national;
+  $('profile').innerHTML=`<label>창업 단계${select('stage',stages,p.stage)}</label><label>사업 예정 지역${select('region',regions,p.region)}</label><label>청년 요건${select('youth',yesOptions,p.youth)}</label><label>여성 요건${select('woman',yesOptions,p.woman)}</label><label>창업 후 경과 연수${textInput('years',p.years,'type="number" min="0" step="any"')}</label><label>업종${textInput('industry',p.industry,'placeholder="예: 출판업"')}</label><label>관심 분야${select('focus',{publishing:'출판·편집',design:'디자인·콘텐츠',general:'창업 전반'},p.focus)}</label><label>선호 지원 유형${select('support',{'':'선택 안 함',...Object.fromEntries(supports.map(v=>[v,v]))},p.support)}</label>`;
+}
+function drawer(content) {
+  $('drawer').innerHTML='<div class="actions"><button data-close aria-label="닫기">닫기 ×</button></div>'+content+'<p id="drawer-status" role="status"></p>';
+  if(!$('drawer').open) $('drawer').showModal();
+}
+function details(id, focusSelector) {
+  const x=get(id);
+  if(!x) return;
+  detailId=id;
+  const f=fit(x), qual=eligibility(x), done=getChecks(id), selected=db.compare.includes(id);
+  drawer(`<h2 id="drawer-title">${esc(x.title)}</h2><p class="muted">${esc(x.agency)} · ${esc(x.year||x.category)}</p>
+    <div class="actions">${link(x)}<button data-star="${esc(id)}" aria-pressed="${favorite(x)}">${favorite(x)?'★ 관심 사업':'☆ 관심 저장'}</button><button data-compare="${esc(id)}" aria-pressed="${selected}">${selected?'비교에서 빼기':'비교에 추가'}</button></div>
+    <dl><dt>접수 시작</dt><dd>${esc(x.start||'미확인')}</dd><dt>신청 마감</dt><dd>${esc(x.deadline||'미확인')} · ${countdown(x)}</dd><dt>지원 유형</dt><dd>${esc(type(x))}</dd><dt>지원금</dt><dd>${esc(x.amount||'확인 필요')}</dd><dt>신청 상태</dt><dd><select id="progress" aria-label="신청 상태">${options({'':'미지정',preparing:'준비 중',applied:'신청 완료'},progress(x))}</select></dd></dl>
+    <p>${esc(x.description||'지원 내용은 연결된 페이지에서 확인하세요.')}</p>
+    <div class="section"><h3>신청 자격 · ${qual.label}</h3>${x.eligibilityText?'<p>'+esc(x.eligibilityText)+'</p>':''}<ul>${qual.details.map(v=>'<li>'+esc(v)+'</li>').join('')}</ul></div>
+    <div class="section"><details><summary>나와의 적합도 <strong>${f.total} / 100</strong></summary><ul>${f.points.map(([label,n,max])=>'<li>'+label+' '+n+' / '+max+'</li>').join('')}</ul><p class="muted">공고에 입력된 정보와 관심 분야를 기준으로 계산합니다.</p></details></div>
+    <div class="section"><h3>신청 준비 체크리스트 <span id="check-count">${done.length}/${checks.length}</span></h3>
+    ${checks.map((label,i)=>`<label class="check"><input type="checkbox" data-check="${i}" ${done.includes(i)?'checked':''}> ${label}</label>`).join('')}</div>
+    <div class="section"><label for="note"><strong>사업별 메모</strong> <small>자동 저장</small></label><textarea id="note" placeholder="문의 결과, 준비 서류, 사업계획 아이디어">${esc(db.notes[id]||'')}</textarea></div>
+    <div class="actions"><button data-archive="${esc(id)}">${db.archived.includes(id)?'수동 보관 해제':'지난 공고에 보관'}</button>${x.custom?'<button data-delete="'+esc(id)+'">직접 등록 공고 삭제</button>':''}</div>`);
+  if(focusSelector) $('drawer').querySelector(focusSelector)?.focus();
+}
+function addForm() {
+  detailId=null;
+  drawer(`<h2 id="drawer-title">공고 직접 추가</h2><form id="add" class="formgrid">
+    <label>사업명${textInput('title','','required maxlength="160"')}</label><label>주관기관${textInput('agency','','required')}</label>
+    <label>분야${select('category',Object.fromEntries(['창업','예비창업','청년','여성','출판','콘텐츠','디자인','지역','기타'].map(v=>[v,v])),'창업')}</label>
+    <label>지원 유형${textInput('supportType','','placeholder="예: 지원금, 교육"')}</label>
+    <label>접수 시작일${textInput('start','','type="date"')}</label><label>마감일${textInput('deadline','','type="date"')}</label>
+    <label>지원금${textInput('amount')}</label><label>대상 창업 단계${select('eligibilityStage',stageOptions,'unknown')}</label>
+    <label>지역 요건${select('regionRequired',{'':'미확인',...regionOptions},'')}</label>
+    <label>창업 연차 상한${textInput('maxYears','','type="number" min="0" step="any"')}</label>
+    <label>대상 업종${textInput('industryRequired')}</label>
+    <div><label><span><input type="checkbox" name="youthOnly"> 청년 대상</span></label><label><span><input type="checkbox" name="womenOnly"> 여성 대상</span></label></div>
+    <label class="wide">공고 링크${textInput('url','','type="url" required')}</label>
+    <label class="wide">신청 자격 원문 요약<textarea name="eligibilityText"></textarea></label>
+    <label class="wide">지원 내용<textarea name="description"></textarea></label>
+    <label class="wide"><span><input type="checkbox" name="conditionsComplete"> 위 입력값에 신청 자격 요건을 모두 반영했어요.</span></label>
+    <div><button class="primary">공고 저장</button></div></form>`);
+}
+
+
+function toggle(items,id) { return items.includes(id)?items.filter(v=>v!==id):[...items,id]; }
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');
+  if(!b) return;
+  const d=b.dataset;
+  if(d.view) return go(d.view);
+  if(d.quick) {
+    $('quick').value=$('quick').value===d.quick?'':d.quick;
+    return renderList();
+  }
+  if(d.open) return details(d.open);
+  if('add' in d) return addForm();
+  if('close' in d) return $('drawer').close();
+  if(d.date) {
+    selected=d.date;
+    renderCalendar();
+    $('calendar-days').querySelector('[data-date="'+d.date+'"]').focus();
+    return;
+  }
+  if(d.compare&&!db.compare.includes(d.compare)&&db.compare.length>=4) {
+    ($('drawer-status')||$('feedback')).textContent='비교 목록에는 최대 4개까지 추가할 수 있어요.';
+    return;
+  }
+  if(d.delete) {
+    if(!confirm('직접 추가한 공고와 이 공고의 신청 기록을 삭제할까요?')) return;
+    db.items=db.items.filter(x=>x.id!==d.delete);
+    for(const field of ['archived','compare','favorites']) db[field]=db[field].filter(id=>id!==d.delete);
+    for(const field of ['states','checks','notes']) delete db[field][d.delete];
+    $('drawer').close();
+  } else if(d.star) {
+    db.favorites=toggle(db.favorites,d.star);
+    if(db.states[d.star]==='saved') delete db.states[d.star];
+  } else if(d.compare) db.compare=toggle(db.compare,d.compare);
+  else if(d.archive) db.archived=toggle(db.archived,d.archive);
+  else return;
+  save();
+  render();
+  if($('drawer').open&&detailId) details(detailId,d.star?'[data-star]':d.compare?'[data-compare]':'[data-archive]');
+  if(d.star&&!$('drawer').open) {
+    [...document.querySelectorAll('#'+view+' [data-star]')].find(el=>el.dataset.star===d.star)?.focus();
+  }
+});
+$('drawer').addEventListener('close',()=>{
+  const id=detailId;
+  detailId=null;
+  if(id) [...document.querySelectorAll('#'+view+' [data-open]')].find(el=>el.dataset.open===id)?.focus();
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.closest('#profile')) {
+    db.profile[t.name]=t.value;
+    save();
+    render();
+  }
+  if(detailId&&'check' in t.dataset) {
+    const i=Number(t.dataset.check);
+    db.checks[detailId]=toggle(getChecks(detailId),i);
+    save();
+    $('check-count').textContent=db.checks[detailId].length+'/'+checks.length;
+  }
+  if(detailId&&t.id==='progress') {
+    db.states[detailId]=t.value;
+    save();
+    render();
+  }
+});
+$('drawer').addEventListener('input',e=>{
+  if(detailId&&e.target.id==='note') {
+    db.notes[detailId]=e.target.value;
+    save();
+  }
+});
+$('drawer').addEventListener('submit',e=>{
+  if(e.target.id!=='add') return;
+  e.preventDefault();
+  const fields=Object.fromEntries(new FormData(e.target));
+  for(const name of ['conditionsComplete','womenOnly','youthOnly']) fields[name]=fields[name]==='on';
+  const status=$('drawer-status');
+  if(!fields.title.trim()||!fields.agency.trim()) {status.textContent='사업명과 주관기관을 입력해 주세요.';return;}
+  if(!/^https?:\/\//i.test(fields.url)) {status.textContent='http 또는 https 공고 주소를 입력해 주세요.';return;}
+  if(fields.start&&fields.deadline&&fields.start>fields.deadline) {status.textContent='마감일은 접수 시작일 이후여야 합니다.';return;}
+  const id='custom-'+(globalThis.crypto?.randomUUID?.()||Date.now());
+  db.items.push({...fields,id,custom:true,year:'직접 등록'});
+  const saved=save();
+  render();
+  details(id);
+  $('drawer-status').textContent=saved?'공고를 저장했어요.':'공고를 브라우저에 저장하지 못했습니다.';
+});
+for(const id of ['search','quick','sort','category','type','elig','dated']) $(id).addEventListener('input',renderList);
+$('archive-search').addEventListener('input',renderArchive);
+$('calendar-saved').addEventListener('change',renderCalendar);
+function moveMonth(delta) {
+  const [y,m]=month.split('-').map(Number);
+  month=new Date(Date.UTC(y,m-1+delta,1)).toISOString().slice(0,7);
+  selected=month+'-01';
+  renderCalendar();
+}
+$('previous').onclick=()=>moveMonth(-1);
+$('next').onclick=()=>moveMonth(1);
+$('export').onclick=()=>{
+  const url=URL.createObjectURL(new Blob([JSON.stringify({version:3,exportedAt:new Date().toISOString(),...db},null,2)],{type:'application/json'}));
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='indie-support-backup.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+$('restore').onclick=()=>$('backup').click();
+$('backup').onchange=async e=>{
+  const file=e.target.files[0];
+  e.target.value='';
+  if(!file) return;
+  try {
+    const data=JSON.parse(await file.text());
+    if(!Array.isArray(data?.items)||!data.states||typeof data.states!=='object'||Array.isArray(data.states)) throw Error('backup');
+    if(!confirm('현재 기록을 JSON 백업에 있는 기록으로 교체할까요?')) return;
+    db=normalize(data);
+    fresh.clear();
+    const saved=save();
+    profileForm();
+    render();
+    if(saved) feedback('JSON 기록을 복원했어요.');
+  } catch { feedback('지원사업 대시보드의 JSON 백업 파일을 선택해 주세요.'); }
+};
+async function refresh(manual=false) {
+  if(location.protocol==='file:') {
+    $('feed-status').textContent='자동 수집은 GitHub Pages에서 확인할 수 있어요.';
+    $('refresh').disabled=true;
+    return;
+  }
+  $('refresh').disabled=true;
+  try {
+    const response=await fetch('./data/notices.json',{cache:'no-store'});
+    if(!response.ok) throw Error('feed');
+    const data=await response.json();
+    if(!Array.isArray(data.items)) throw Error('format');
+    const previous=new Set(db.seen), items=data.items.filter(x=>record(x)&&/^https?:\/\//i.test(x.url||''));
+    const unseen=items.filter(x=>!previous.has(x.id));
+    unseen.forEach(x=>fresh.add(x.id));
+    db.seen=[...new Set([...db.seen,...items.map(x=>x.id)])];
+    db.liveCache=[...new Map([...db.liveCache,...items].map(x=>[x.id,x])).values()];
+    db.lastChecked=new Date().toISOString();
+    save();
+    $('feed-status').textContent=data.updated_at?'뉴스 RSS 후보 '+items.length+'건 · 수집 '+new Date(data.updated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+(fresh.size?' · 새 후보 '+fresh.size+'건':''):'RSS 자동 수집 첫 실행 대기 중';
+    if(manual) feedback(unseen.length?'새 후보 '+unseen.length+'건을 찾았어요.':'이번 확인에서 새 후보가 없습니다.');
+    render();
+  } catch { $('feed-status').textContent='RSS 수집 파일을 불러올 수 없습니다. 저장된 기록을 표시합니다.'; }
+  finally { $('refresh').disabled=false; }
+}
+$('refresh').onclick=()=>refresh(true);
+profileForm();
+render();
+refresh();
+
+
+</script></body></html>
