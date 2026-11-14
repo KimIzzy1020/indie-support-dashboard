@@ -17,7 +17,7 @@ footer{padding:18px 0 30px;border-top:1px solid var(--line);color:var(--muted)}f
 <section id="list"><h1>독립출판 창업 지원사업</h1><p class="intro muted">2027년 출판사 창업을 위한 공고와 신청 준비</p>
 <div class="metrics"><button data-quick="saved"><strong id="saved-count">0</strong><span>관심 사업</span></button><button data-quick="urgent"><strong class="hot" id="urgent-count">0</strong><span>7일 내 마감</span></button><button data-quick="preparing"><strong id="prep-count">0</strong><span>신청 준비 중</span></button></div>
 <div class="heading"><h2>우선 확인할 지원사업</h2><button class="primary" data-add>＋ 공고 추가</button></div>
-<div class="filters"><input id="search" type="search" placeholder="사업명, 기관, 키워드 검색" aria-label="지원사업 검색"><select id="quick" aria-label="빠른 필터"><option value="">전체</option><option value="saved">관심 사업</option><option value="urgent">7일 내 마감</option><option value="preparing">신청 준비 중</option><option value="applied">신청 완료</option><option value="new">새 발견 후보</option></select><select id="sort" aria-label="정렬"><option value="priority">우선순위</option><option value="deadline">마감일순</option><option value="fit">적합도순</option><option value="name">이름순</option></select></div>
+<div class="filters"><input id="search" type="search" placeholder="사업명, 기관, 키워드 검색" aria-label="지원사업 검색"><select id="quick" aria-label="빠른 필터"><option value="">전체</option><option value="saved">관심 사업</option><option value="urgent">7일 내 마감</option><option value="preparing">신청 준비 중</option><option value="applied">신청 완료</option><option value="dismissed">관심 없음</option><option value="new">새 발견 후보</option></select><select id="sort" aria-label="정렬"><option value="priority">우선순위</option><option value="deadline">마감일순</option><option value="fit">적합도순</option><option value="name">이름순</option></select></div>
 <details><summary>상세 필터</summary><div class="filters filter-panel"><select id="category" aria-label="분야"></select><select id="type" aria-label="지원 유형"></select><select id="elig" aria-label="신청 자격"><option value="">전체 자격</option><option>조건 일치</option><option>확인 필요</option><option>조건 불일치</option></select><label><input type="checkbox" id="dated"> 마감일 확인된 공고만</label></div></details>
 <p id="result-count" class="muted"></p><div class="row head" aria-hidden="true"><span>지원사업</span><span>신청 마감</span><span>신청 자격</span><span>적합도</span><span>관심</span></div><div id="results"></div></section>
 <section id="calendar" hidden><div class="heading"><h1>지원사업 캘린더</h1><label><input type="checkbox" id="calendar-saved"> 관심 사업만</label></div><div class="heading"><button id="previous">이전 달</button><h2 id="month"></h2><button id="next">다음 달</button></div><div id="calendar-days" class="calendar"></div><h3 id="date-label"></h3><div id="events"></div></section>
@@ -54,6 +54,7 @@ function normalize(data = {}) {
     favorites:[...new Set([...(Array.isArray(data.favorites)?data.favorites:[]),...Object.keys(states).filter(id=>states[id]==='saved')])],
     compare:Array.isArray(data.compare)?[...new Set(data.compare)].slice(0,4):[],
     archived:Array.isArray(data.archived)?data.archived:[],
+    dismissed:Array.isArray(data.dismissed)?[...new Set(data.dismissed.filter(id=>typeof id==='string'))]:[],
     seen:Array.isArray(data.seen)?data.seen:[],
     liveCache:Array.isArray(data.liveCache)?data.liveCache.filter(record):[],
     lastChecked:data.lastChecked||null
@@ -79,6 +80,7 @@ const today = () => new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:
 const validDate = d => typeof d==='string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d)) && new Date(d).toISOString().slice(0,10)===d;
 const left = x => validDate(x.deadline)?(Date.parse(x.deadline)-Date.parse(today()))/86400000:Infinity;
 const past = x => left(x)<0 || db.archived.includes(x.id);
+const dismissed = x => db.dismissed.includes(x.id);
 const urgent = x => !past(x) && left(x)<=7;
 const countdown = x => left(x)===Infinity?'마감 미확인':left(x)<0?'마감 종료':left(x)===0?'D-DAY':'D-'+left(x);
 const candidate = x => x.id.startsWith('news-') || x.category==='발견 후보';
@@ -144,7 +146,8 @@ function rows(items) {
   }).join('');
 }
 function renderList() {
-  const items=all(), active=items.filter(x=>!past(x));
+  const items=all(), active=items.filter(x=>!past(x)&&!dismissed(x));
+  $('quick').querySelector('[value=dismissed]').textContent='관심 없음 ('+items.filter(dismissed).length+')';
   $('saved-count').textContent=active.filter(favorite).length;
   $('urgent-count').textContent=active.filter(urgent).length;
   $('prep-count').textContent=active.filter(x=>progress(x)==='preparing').length;
@@ -159,22 +162,23 @@ function renderList() {
   const query=$('search').value.trim().toLowerCase(), category=$('category').value, support=$('type').value;
   const qual=$('elig').value, dated=$('dated').checked, quick=$('quick').value, sort=$('sort').value;
   const filters={saved:favorite,urgent,preparing:x=>progress(x)==='preparing',applied:x=>progress(x)==='applied',new:x=>fresh.has(x.id)};
-  const results=active.filter(x=>(!query||facts(x).toLowerCase().includes(query))&&(!category||x.category===category)&&(!support||type(x).includes(support))&&(!qual||eligibility(x).label===qual)&&(!dated||validDate(x.deadline))&&(!quick||filters[quick](x)));
+  const pool=quick==='dismissed'?items.filter(dismissed):active;
+  const results=pool.filter(x=>(!query||facts(x).toLowerCase().includes(query))&&(!category||x.category===category)&&(!support||type(x).includes(support))&&(!qual||eligibility(x).label===qual)&&(!dated||validDate(x.deadline))&&(!filters[quick]||filters[quick](x)));
   const byDate=(a,b)=>(left(a)-left(b))||0;
   const byFit=(a,b)=>fit(b).total-fit(a).total;
   const rank=x=>eligibility(x).label==='조건 불일치'?2:urgent(x)?0:1;
   results.sort((a,b)=>sort==='name'?a.title.localeCompare(b.title,'ko'):sort==='deadline'?byDate(a,b):sort==='fit'?byFit(a,b):rank(a)-rank(b)||byFit(a,b)||byDate(a,b));
   $('result-count').textContent=results.length+'건';
-  $('results').innerHTML=rows(results)||empty('조건에 맞는 지원사업이 없습니다.');
+  $('results').innerHTML=rows(results)||empty(quick==='dismissed'?'표시할 관심 없음 공고가 없습니다.':'조건에 맞는 지원사업이 없습니다.');
 }
 function renderArchive() {
   const query=$('archive-search').value.trim().toLowerCase();
-  $('archive-results').innerHTML=rows(all().filter(x=>past(x)&&facts(x).toLowerCase().includes(query)).sort((a,b)=>(b.deadline||'').localeCompare(a.deadline||'')))||empty('검색 조건에 맞는 지난 공고가 없습니다.');
+  $('archive-results').innerHTML=rows(all().filter(x=>past(x)&&!dismissed(x)&&facts(x).toLowerCase().includes(query)).sort((a,b)=>(b.deadline||'').localeCompare(a.deadline||'')))||empty('검색 조건에 맞는 지난 공고가 없습니다.');
 }
 function renderCalendar() {
   const [year,m]=month.split('-').map(Number), prefix=month+'-';
   $('month').textContent=year+'년 '+m+'월';
-  const entries=all().filter(x=>!$('calendar-saved').checked||favorite(x)).flatMap(x=>[[x.start,'접수 시작'],[x.deadline,'신청 마감']].filter(([date])=>validDate(date)&&date.startsWith(prefix)).map(([date,label])=>({date,label,x})));
+  const entries=all().filter(x=>!dismissed(x)&&(!$('calendar-saved').checked||favorite(x))).flatMap(x=>[[x.start,'접수 시작'],[x.deadline,'신청 마감']].filter(([date])=>validDate(date)&&date.startsWith(prefix)).map(([date,label])=>({date,label,x})));
   const offset=new Date(Date.UTC(year,m-1,1)).getUTCDay(), days=new Date(Date.UTC(year,m,0)).getUTCDate();
   $('calendar-days').innerHTML=[...'일월화수목금토'].map(d=>'<span>'+d+'</span>').join('')+'<span></span>'.repeat(offset)+Array.from({length:days},(_,i)=>{
     const date=prefix+String(i+1).padStart(2,'0'), count=entries.filter(e=>e.date===date).length;
@@ -225,7 +229,7 @@ function details(id, focusSelector) {
   detailId=id;
   const f=fit(x), qual=eligibility(x), done=getChecks(id), selected=db.compare.includes(id);
   drawer(`<h2 id="drawer-title">${esc(x.title)}</h2><p class="muted">${esc(x.agency)} · ${esc(x.year||x.category)}</p>
-    <div class="actions">${link(x)}<button data-star="${esc(id)}" aria-pressed="${favorite(x)}">${favorite(x)?'★ 관심 사업':'☆ 관심 저장'}</button><button data-compare="${esc(id)}" aria-pressed="${selected}">${selected?'비교에서 빼기':'비교에 추가'}</button></div>
+    <div class="actions">${link(x)}<button data-star="${esc(id)}" aria-pressed="${favorite(x)}">${favorite(x)?'★ 관심 사업':'☆ 관심 저장'}</button><button data-compare="${esc(id)}" aria-pressed="${selected}">${selected?'비교에서 빼기':'비교에 추가'}</button><button data-dismiss="${esc(id)}">${dismissed(x)?'목록에 다시 표시':'관심 없음'}</button></div>
     <dl><dt>접수 시작</dt><dd>${esc(x.start||'미확인')}</dd><dt>신청 마감</dt><dd>${esc(x.deadline||'미확인')} · ${countdown(x)}</dd><dt>지원 유형</dt><dd>${esc(type(x))}</dd><dt>지원금</dt><dd>${esc(x.amount||'확인 필요')}</dd><dt>신청 상태</dt><dd><select id="progress" aria-label="신청 상태">${options({'':'미지정',preparing:'준비 중',applied:'신청 완료'},progress(x))}</select></dd></dl>
     <p>${esc(x.description||'지원 내용은 연결된 페이지에서 확인하세요.')}</p>
     <div class="section"><h3>신청 자격 · ${qual.label}</h3>${x.eligibilityText?'<p>'+esc(x.eligibilityText)+'</p>':''}<ul>${qual.details.map(v=>'<li>'+esc(v)+'</li>').join('')}</ul></div>
@@ -282,9 +286,18 @@ document.addEventListener('click',e=>{
   if(d.delete) {
     if(!confirm('직접 추가한 공고와 이 공고의 신청 기록을 삭제할까요?')) return;
     db.items=db.items.filter(x=>x.id!==d.delete);
-    for(const field of ['archived','compare','favorites']) db[field]=db[field].filter(id=>id!==d.delete);
+    for(const field of ['archived','compare','favorites','dismissed']) db[field]=db[field].filter(id=>id!==d.delete);
     for(const field of ['states','checks','notes']) delete db[field][d.delete];
     $('drawer').close();
+  } else if(d.dismiss) {
+    db.dismissed=toggle(db.dismissed,d.dismiss);
+    const hidden=db.dismissed.includes(d.dismiss);
+    const saved=save();
+    $('drawer').close();
+    render();
+    if(saved) feedback(hidden?'공고를 숨겼어요. 지원사업의 ‘관심 없음’ 필터에서 다시 표시할 수 있어요.':'공고를 다시 표시했어요.');
+    (view==='list'?$('quick'):document.querySelector('[data-view="'+view+'"]')).focus();
+    return;
   } else if(d.star) {
     db.favorites=toggle(db.favorites,d.star);
     if(db.states[d.star]==='saved') delete db.states[d.star];
