@@ -17,7 +17,7 @@ footer{padding:18px 0 30px;border-top:1px solid var(--line);color:var(--muted)}f
 <section id="list"><h1>독립출판 창업 지원사업</h1><p class="intro muted">2027년 출판사 창업을 위한 공고와 신청 준비</p>
 <div class="metrics"><button data-quick="saved"><strong id="saved-count">0</strong><span>관심 사업</span></button><button data-quick="urgent"><strong class="hot" id="urgent-count">0</strong><span>7일 내 마감</span></button><button data-quick="preparing"><strong id="prep-count">0</strong><span>신청 준비 중</span></button></div>
 <div class="heading"><h2>우선 확인할 지원사업</h2><button class="primary" data-add>＋ 공고 추가</button></div>
-<div class="filters"><input id="search" type="search" placeholder="사업명, 기관, 키워드 검색" aria-label="지원사업 검색"><select id="quick" aria-label="빠른 필터"><option value="">전체</option><option value="saved">관심 사업</option><option value="urgent">7일 내 마감</option><option value="preparing">신청 준비 중</option><option value="applied">신청 완료</option><option value="dismissed">관심 없음</option><option value="new">새 발견 후보</option></select><select id="sort" aria-label="정렬"><option value="priority">우선순위</option><option value="deadline">마감일순</option><option value="fit">적합도순</option><option value="name">이름순</option></select></div>
+<div class="filters"><input id="search" type="search" placeholder="사업명, 기관, 키워드 검색" aria-label="지원사업 검색"><select id="quick" aria-label="빠른 필터"><option value="">전체</option><option value="saved">관심 사업</option><option value="urgent">7일 내 마감</option><option value="preparing">신청 준비 중</option><option value="applied">신청 완료</option><option value="unreviewed">미확인 공고</option><option value="reviewed">확인 완료</option><option value="dismissed">관심 없음</option><option value="new">새 발견 후보</option></select><select id="sort" aria-label="정렬"><option value="priority">우선순위</option><option value="deadline">마감일순</option><option value="fit">적합도순</option><option value="name">이름순</option></select></div>
 <details><summary>상세 필터</summary><div class="filters filter-panel"><select id="category" aria-label="분야"></select><select id="type" aria-label="지원 유형"></select><select id="elig" aria-label="신청 자격"><option value="">전체 자격</option><option>조건 일치</option><option>확인 필요</option><option>조건 불일치</option></select><label><input type="checkbox" id="dated"> 마감일 확인된 공고만</label></div></details>
 <p id="result-count" class="muted"></p><div class="row head" aria-hidden="true"><span>지원사업</span><span>신청 마감</span><span>신청 자격</span><span>적합도</span><span>관심</span></div><div id="results"></div></section>
 <section id="calendar" hidden><div class="heading"><h1>지원사업 캘린더</h1><label><input type="checkbox" id="calendar-saved"> 관심 사업만</label></div><div class="heading"><button id="previous">이전 달</button><h2 id="month"></h2><button id="next">다음 달</button></div><div id="calendar-days" class="calendar"></div><h3 id="date-label"></h3><div id="events"></div></section>
@@ -55,6 +55,7 @@ function normalize(data = {}) {
     compare:Array.isArray(data.compare)?[...new Set(data.compare)].slice(0,4):[],
     archived:Array.isArray(data.archived)?data.archived:[],
     dismissed:Array.isArray(data.dismissed)?[...new Set(data.dismissed.filter(id=>typeof id==='string'))]:[],
+    reviewed:Array.isArray(data.reviewed)?[...new Set(data.reviewed.filter(id=>typeof id==='string'))]:[],
     seen:Array.isArray(data.seen)?data.seen:[],
     liveCache:Array.isArray(data.liveCache)?data.liveCache.filter(record):[],
     lastChecked:data.lastChecked||null
@@ -81,6 +82,7 @@ const validDate = d => typeof d==='string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !
 const left = x => validDate(x.deadline)?(Date.parse(x.deadline)-Date.parse(today()))/86400000:Infinity;
 const past = x => left(x)<0 || db.archived.includes(x.id);
 const dismissed = x => db.dismissed.includes(x.id);
+const reviewed = x => db.reviewed.includes(x.id);
 const urgent = x => !past(x) && left(x)<=7;
 const countdown = x => left(x)===Infinity?'마감 미확인':left(x)<0?'마감 종료':left(x)===0?'D-DAY':'D-'+left(x);
 const candidate = x => x.id.startsWith('news-') || x.category==='발견 후보';
@@ -133,13 +135,14 @@ let view='list';
 let selected=today();
 let month=selected.slice(0,7);
 let detailId=null;
+let detailOrder=[];
 
 
 function rows(items) {
   return items.map(x=>{
     const deadline=validDate(x.deadline)?x.deadline:'';
     const label=eligibility(x).label;
-    return `<article class="row"><div class="name">${button(x.id,x.title)}<small>${esc(x.agency)} · ${esc(x.category)}${progress(x)?' · '+progressLabel(x):''}${fresh.has(x.id)?' · <span class="hot">새 후보</span>':candidate(x)?' · 뉴스 RSS':x.year==='연도별 개별 공고 확인'?' · 기관 안내':''}</small></div>
+    return `<article class="row"><div class="name">${button(x.id,x.title)}<small>${esc(x.agency)} · ${esc(x.category)}${reviewed(x)?' · ✓ 확인 완료':''}${progress(x)?' · '+progressLabel(x):''}${fresh.has(x.id)?' · <span class="hot">새 후보</span>':candidate(x)?' · 뉴스 RSS':x.year==='연도별 개별 공고 확인'?' · 기관 안내':''}</small></div>
     <div><span class="mobile-label">신청 마감</span><span class="${urgent(x)?'hot':''}">${countdown(x)}</span><small>${deadline}</small></div>
     <div><span class="mobile-label">신청 자격</span>${label}</div><div><span class="mobile-label">적합도</span><strong>${fit(x).total}</strong> / 100</div>
     <button class="star ${favorite(x)?'hot':''}" data-star="${esc(x.id)}" aria-label="${esc(x.title)} 관심 사업" aria-pressed="${favorite(x)}">${favorite(x)?'★':'☆'}</button></article>`;
@@ -162,6 +165,8 @@ function renderList() {
   const query=$('search').value.trim().toLowerCase(), category=$('category').value, support=$('type').value;
   const qual=$('elig').value, dated=$('dated').checked, quick=$('quick').value, sort=$('sort').value;
   const filters={saved:favorite,urgent,preparing:x=>progress(x)==='preparing',applied:x=>progress(x)==='applied',new:x=>fresh.has(x.id)};
+  filters.reviewed=reviewed;
+  filters.unreviewed=x=>!reviewed(x);
   const pool=quick==='dismissed'?items.filter(dismissed):active;
   const results=pool.filter(x=>(!query||facts(x).toLowerCase().includes(query))&&(!category||x.category===category)&&(!support||type(x).includes(support))&&(!qual||eligibility(x).label===qual)&&(!dated||validDate(x.deadline))&&(!filters[quick]||filters[quick](x)));
   const byDate=(a,b)=>(left(a)-left(b))||0;
@@ -219,17 +224,20 @@ function profileForm() {
   const regions={...regionOptions}; delete regions.national;
   $('profile').innerHTML=`<label>창업 단계${select('stage',stages,p.stage)}</label><label>사업 예정 지역${select('region',regions,p.region)}</label><label>청년 요건${select('youth',yesOptions,p.youth)}</label><label>여성 요건${select('woman',yesOptions,p.woman)}</label><label>창업 후 경과 연수${textInput('years',p.years,'type="number" min="0" step="any"')}</label><label>업종${textInput('industry',p.industry,'placeholder="예: 출판업"')}</label><label>관심 분야${select('focus',{publishing:'출판·편집',design:'디자인·콘텐츠',general:'창업 전반'},p.focus)}</label><label>선호 지원 유형${select('support',{'':'선택 안 함',...Object.fromEntries(supports.map(v=>[v,v]))},p.support)}</label>`;
 }
-function drawer(content) {
-  $('drawer').innerHTML='<div class="actions"><button data-close aria-label="닫기">닫기 ×</button></div>'+content+'<p id="drawer-status" role="status"></p>';
+function drawer(content, navigation='') {
+  $('drawer').innerHTML='<div class="actions"><button data-close aria-label="닫기">닫기 ×</button>'+navigation+'</div>'+content+'<p id="drawer-status" role="status"></p>';
   if(!$('drawer').open) $('drawer').showModal();
 }
 function details(id, focusSelector) {
   const x=get(id);
   if(!x) return;
   detailId=id;
+  const position=detailOrder.indexOf(id);
+  const navigation=position<0?'':`<button data-step="-1" ${position===0?'disabled':''}>← 이전 공고</button><button data-step="1" ${position===detailOrder.length-1?'disabled':''}>다음 공고 →</button><small>${position+1} / ${detailOrder.length}</small>`;
   const f=fit(x), qual=eligibility(x), done=getChecks(id), selected=db.compare.includes(id);
   drawer(`<h2 id="drawer-title">${esc(x.title)}</h2><p class="muted">${esc(x.agency)} · ${esc(x.year||x.category)}</p>
     <div class="actions">${link(x)}<button data-star="${esc(id)}" aria-pressed="${favorite(x)}">${favorite(x)?'★ 관심 사업':'☆ 관심 저장'}</button><button data-compare="${esc(id)}" aria-pressed="${selected}">${selected?'비교에서 빼기':'비교에 추가'}</button><button data-dismiss="${esc(id)}">${dismissed(x)?'목록에 다시 표시':'관심 없음'}</button></div>
+    <label class="check"><input type="checkbox" id="reviewed" ${reviewed(x)?'checked':''}> 확인 완료</label>
     <dl><dt>접수 시작</dt><dd>${esc(x.start||'미확인')}</dd><dt>신청 마감</dt><dd>${esc(x.deadline||'미확인')} · ${countdown(x)}</dd><dt>지원 유형</dt><dd>${esc(type(x))}</dd><dt>지원금</dt><dd>${esc(x.amount||'확인 필요')}</dd><dt>신청 상태</dt><dd><select id="progress" aria-label="신청 상태">${options({'':'미지정',preparing:'준비 중',applied:'신청 완료'},progress(x))}</select></dd></dl>
     <p>${esc(x.description||'지원 내용은 연결된 페이지에서 확인하세요.')}</p>
     <div class="section"><h3>신청 자격 · ${qual.label}</h3>${x.eligibilityText?'<p>'+esc(x.eligibilityText)+'</p>':''}<ul>${qual.details.map(v=>'<li>'+esc(v)+'</li>').join('')}</ul></div>
@@ -237,11 +245,12 @@ function details(id, focusSelector) {
     <div class="section"><h3>신청 준비 체크리스트 <span id="check-count">${done.length}/${checks.length}</span></h3>
     ${checks.map((label,i)=>`<label class="check"><input type="checkbox" data-check="${i}" ${done.includes(i)?'checked':''}> ${label}</label>`).join('')}</div>
     <div class="section"><label for="note"><strong>사업별 메모</strong> <small>자동 저장</small></label><textarea id="note" placeholder="문의 결과, 준비 서류, 사업계획 아이디어">${esc(db.notes[id]||'')}</textarea></div>
-    <div class="actions"><button data-archive="${esc(id)}">${db.archived.includes(id)?'수동 보관 해제':'지난 공고에 보관'}</button>${x.custom?'<button data-delete="'+esc(id)+'">직접 등록 공고 삭제</button>':''}</div>`);
+    <div class="actions"><button data-archive="${esc(id)}">${db.archived.includes(id)?'수동 보관 해제':'지난 공고에 보관'}</button>${x.custom?'<button data-delete="'+esc(id)+'">직접 등록 공고 삭제</button>':''}</div>`,navigation);
   if(focusSelector) $('drawer').querySelector(focusSelector)?.focus();
 }
 function addForm() {
   detailId=null;
+  detailOrder=[];
   drawer(`<h2 id="drawer-title">공고 직접 추가</h2><form id="add" class="formgrid">
     <label>사업명${textInput('title','','required maxlength="160"')}</label><label>주관기관${textInput('agency','','required')}</label>
     <label>분야${select('category',Object.fromEntries(['창업','예비창업','청년','여성','출판','콘텐츠','디자인','지역','기타'].map(v=>[v,v])),'창업')}</label>
@@ -270,7 +279,20 @@ document.addEventListener('click',e=>{
     $('quick').value=$('quick').value===d.quick?'':d.quick;
     return renderList();
   }
-  if(d.open) return details(d.open);
+  if(d.open) {
+    detailOrder=[...new Set([...$(view).querySelectorAll('[data-open]')].map(el=>el.dataset.open))];
+    return details(d.open);
+  }
+  if(d.step) {
+    const id=detailOrder[detailOrder.indexOf(detailId)+Number(d.step)];
+    if(id) {
+      details(id,'[data-step="'+d.step+'"]:not(:disabled), [data-step]:not(:disabled)');
+      const next=$('drawer').querySelector('[data-step="'+d.step+'"]:not(:disabled)');
+      if(next) next.focus();
+      $('drawer').scrollTop=0;
+    }
+    return;
+  }
   if('add' in d) return addForm();
   if('close' in d) return $('drawer').close();
   if(d.date) {
@@ -286,7 +308,7 @@ document.addEventListener('click',e=>{
   if(d.delete) {
     if(!confirm('직접 추가한 공고와 이 공고의 신청 기록을 삭제할까요?')) return;
     db.items=db.items.filter(x=>x.id!==d.delete);
-    for(const field of ['archived','compare','favorites','dismissed']) db[field]=db[field].filter(id=>id!==d.delete);
+    for(const field of ['archived','compare','favorites','dismissed','reviewed']) db[field]=db[field].filter(id=>id!==d.delete);
     for(const field of ['states','checks','notes']) delete db[field][d.delete];
     $('drawer').close();
   } else if(d.dismiss) {
@@ -314,10 +336,16 @@ document.addEventListener('click',e=>{
 $('drawer').addEventListener('close',()=>{
   const id=detailId;
   detailId=null;
+  detailOrder=[];
   if(id) [...document.querySelectorAll('#'+view+' [data-open]')].find(el=>el.dataset.open===id)?.focus();
 });
 document.addEventListener('change',e=>{
   const t=e.target;
+  if(detailId&&t.id==='reviewed') {
+    db.reviewed=toggle(db.reviewed,detailId);
+    save();
+    render();
+  }
   if(t.closest('#profile')) {
     db.profile[t.name]=t.value;
     save();
